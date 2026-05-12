@@ -127,14 +127,16 @@
       flex-direction: column;
       gap: 1rem;
       align-items: flex-start;
+      position: relative;
+      cursor: pointer;
     }
 
     .hero-image-wrap img {
-      width: 100%;
-      max-height: 72vh;
-      object-fit: contain;
-      object-position: left top;
       display: block;
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: 72vh;
       opacity: 0;
       transition: opacity 0.7s ease;
     }
@@ -184,12 +186,53 @@
     }
     .project-link:hover .project-name { color: var(--muted); }
 
-    .project-count {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      color: #d0ccc4;
-      align-self: center;
+    /* ── Hero overlay ── */
+    .hero-image-inner {
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+      cursor: pointer;
     }
+
+    .hero-image-inner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.35s ease;
+      pointer-events: none;
+    }
+    .hero-image-inner:hover::after {
+      background: rgba(0,0,0,0.07);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(20, 18, 15, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .hero-image-wrap.open .hero-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .hero-overlay a {
+      font-size: 10px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: #f0ede8;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(240,237,232,0.35);
+      padding-bottom: 3px;
+      transition: border-color 0.2s;
+    }
+    .hero-overlay a:hover { border-color: #f0ede8; }
 
 
     /* ── Contact ── */
@@ -295,7 +338,7 @@
 
       .hero {
         grid-template-columns: 1fr;
-        padding: 88px 24px 60px;
+        padding: 116px 24px 60px;
         gap: 48px;
         min-height: unset;
       }
@@ -340,8 +383,13 @@
       </p>
       <a href="om-tom.html" class="hero-link">Om Tom →</a>
     </div>
-    <div class="hero-image-wrap">
-      <img id="hero-img" src="" alt="">
+    <div class="hero-image-wrap" id="hero-wrap">
+      <div class="hero-image-inner">
+        <img id="hero-img" src="" alt="">
+        <div class="hero-overlay" id="hero-overlay">
+          <a href="kjop.html">Kjøp trykk</a>
+        </div>
+      </div>
       <span class="hero-caption" id="hero-caption"></span>
     </div>
   </section>
@@ -351,21 +399,18 @@
     <span class="section-label">Galleri</span>
     <ul class="project-list">
       <li class="project-item">
-        <a href="on-the-road.html" class="project-link" data-key="onTheRoad">
+        <a href="on-the-road.html" class="project-link">
           <span class="project-name">On the Road</span>
-          <span class="project-count" id="count-road"></span>
         </a>
       </li>
       <li class="project-item">
-        <a href="haiku.html" class="project-link" data-key="haiku">
+        <a href="haiku.html" class="project-link">
           <span class="project-name">Haiku</span>
-          <span class="project-count" id="count-haiku"></span>
         </a>
       </li>
       <li class="project-item">
-        <a href="steinansikt.html" class="project-link" data-key="naturbilder">
+        <a href="steinansikt.html" class="project-link">
           <span class="project-name">Steinansikt</span>
-          <span class="project-count" id="count-natur"></span>
         </a>
       </li>
     </ul>
@@ -418,11 +463,16 @@
     pre.onload = () => { heroImg.src = pre.src; heroImg.classList.add('loaded'); };
     document.getElementById('hero-caption').textContent = pick.title;
 
-    // Gallery counts
-    document.getElementById('count-road').textContent  = GALLERY.onTheRoad.length + ' bilder';
-    document.getElementById('count-haiku').textContent = GALLERY.haiku.length + ' bilder';
-    document.getElementById('count-natur').textContent = GALLERY.naturbilder.length + ' bilder';
+    // Hero overlay
+    const heroWrap = document.getElementById('hero-wrap');
 
+    heroWrap.addEventListener('click', e => {
+      if (e.target.closest('a')) return;
+      heroWrap.classList.toggle('open');
+    });
+    document.addEventListener('click', e => {
+      if (!heroWrap.contains(e.target)) heroWrap.classList.remove('open');
+    });
 
     // Contact form
     document.getElementById('contact-form').addEventListener('submit', e => {
