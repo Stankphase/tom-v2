@@ -590,6 +590,7 @@
     const stored = sessionStorage.getItem('langSwitchImage');
     const pick = stored ? JSON.parse(stored) : all[Math.floor(Math.random() * all.length)];
     sessionStorage.removeItem('langSwitchImage');
+    if (stored) document.body.style.animation = 'none';
     const heroImg = document.getElementById('hero-img');
     const pre = new Image();
     pre.src = imgSrc(pick.folder, pick.file);
@@ -639,7 +640,11 @@
       a.addEventListener('click', e => {
         const href = a.getAttribute('href');
         if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http')) return;
-        if (a.classList.contains('lang-link')) sessionStorage.setItem('langSwitchImage', JSON.stringify(pick));
+        if (a.classList.contains('lang-link')) {
+          sessionStorage.setItem('langSwitchImage', JSON.stringify(pick));
+          location.href = href;
+          return;
+        }
         e.preventDefault();
         document.body.classList.add('page-exit');
         setTimeout(() => { location.href = href; }, 250);

@@ -413,25 +413,39 @@
     }));
 
     // Page transitions
+    if (sessionStorage.getItem('langSwitch')) {
+      document.body.style.animation = 'none';
+      sessionStorage.removeItem('langSwitch');
+    }
     document.querySelectorAll('a[href]').forEach(a => {
       a.addEventListener('click', e => {
         const href = a.getAttribute('href');
         if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http')) return;
+        if (a.classList.contains('lang-link')) {
+          sessionStorage.setItem('langSwitch', '1');
+          location.href = href;
+          return;
+        }
+        sessionStorage.removeItem('kjopImg');
+        sessionStorage.removeItem('kjopTitle');
         e.preventDefault();
         document.body.classList.add('page-exit');
         setTimeout(() => { location.href = href; }, 250);
       });
     });
 
-    // Vis valgt bilde fra URL-parameter
+    // Vis valgt bilde fra URL-parameter eller språkbytte
     const params = new URLSearchParams(window.location.search);
-    const imgSrc  = params.get('img');
-    const imgTitle = params.get('title');
+    if (params.get('img')) {
+      sessionStorage.setItem('kjopImg',   params.get('img'));
+      sessionStorage.setItem('kjopTitle', params.get('title') || '');
+    }
+    const imgSrc   = params.get('img')   || sessionStorage.getItem('kjopImg');
+    const imgTitle = params.get('title') || sessionStorage.getItem('kjopTitle') || '';
     if (imgSrc) {
       document.getElementById('selected-img').src = imgSrc;
       document.getElementById('selected-title').textContent = imgTitle || '';
       document.getElementById('selected-image').style.display = 'flex';
-      // Forhåndsfyll meldingsfeltet
       const msgField = document.getElementById('message');
       if (imgTitle) msgField.placeholder = 'Jeg er interessert i «' + imgTitle + '». Størrelse: …';
     }

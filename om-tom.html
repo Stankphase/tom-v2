@@ -422,10 +422,19 @@
     }));
 
     // Page transitions
+    if (sessionStorage.getItem('langSwitch')) {
+      document.body.style.animation = 'none';
+      sessionStorage.removeItem('langSwitch');
+    }
     document.querySelectorAll('a[href]').forEach(a => {
       a.addEventListener('click', e => {
         const href = a.getAttribute('href');
         if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http')) return;
+        if (a.classList.contains('lang-link')) {
+          sessionStorage.setItem('langSwitch', '1');
+          location.href = href;
+          return;
+        }
         e.preventDefault();
         document.body.classList.add('page-exit');
         setTimeout(() => { location.href = href; }, 250);
