@@ -191,25 +191,6 @@
       align-self: center;
     }
 
-    /* ── Hover preview ── */
-    #preview {
-      position: fixed;
-      pointer-events: none;
-      z-index: 30;
-      opacity: 1;
-      transition: opacity 0.4s ease;
-      background: #e2ddd7;
-      top: 200px;
-      left: 200px;
-    }
-    #preview.visible { opacity: 1; }
-    #preview img {
-      display: block;
-      width: 220px;
-      height: 280px;
-      object-fit: cover;
-      box-shadow: 0 16px 56px rgba(0,0,0,0.13);
-    }
 
     /* ── Contact ── */
     #kontakt {
@@ -417,8 +398,6 @@
     <span class="footer-copy">© 2025 Tom Martinsen Estate. Alle rettigheter forbeholdt.</span>
   </footer>
 
-  <div id="preview"><img src="" alt="" id="preview-img"></div>
-
   <script>
     const BASE = '../tom-martinsen-gallery-lys/images/';
 
@@ -444,38 +423,6 @@
     document.getElementById('count-haiku').textContent = GALLERY.haiku.length + ' bilder';
     document.getElementById('count-natur').textContent = GALLERY.naturbilder.length + ' bilder';
 
-    // Hover preview
-    const folders = { onTheRoad: 'on-the-road', haiku: 'haiku', naturbilder: 'naturbilder' };
-    const preview    = document.getElementById('preview');
-    const previewImg = document.getElementById('preview-img');
-    let mx = 0, my = 0, raf = null;
-
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      if (preview.classList.contains('visible')) {
-        cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          preview.style.transform = `translate(${mx + 28}px, ${my - 150}px)`;
-        });
-      }
-    });
-
-    document.querySelectorAll('.project-link[data-key]').forEach(link => {
-      const key    = link.dataset.key;
-      const images = GALLERY[key];
-      const src    = imgSrc(folders[key], images[0].file);
-
-      // Preload so image is ready on first hover
-      const preloader = new Image();
-      preloader.src = src;
-
-      link.addEventListener('mouseenter', () => {
-        previewImg.src = src;
-        preview.style.transform = `translate(${mx + 28}px, ${my - 150}px)`;
-        preview.classList.add('visible');
-      });
-      link.addEventListener('mouseleave', () => preview.classList.remove('visible'));
-    });
 
     // Contact form
     document.getElementById('contact-form').addEventListener('submit', e => {
