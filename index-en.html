@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tom Martinsen — Fotograf</title>
-  <meta name="description" content="Offisielt galleri for Tom Martinsens fotografier.">
+  <title>Tom Martinsen — Photographer</title>
+  <meta name="description" content="Official gallery for Tom Martinsen's photographs.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,300;0,400;1,300&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&display=swap" rel="stylesheet">
@@ -331,9 +331,8 @@
       text-align: center;
     }
 
-
     /* ── Contact ── */
-    #kontakt {
+    #contact {
       padding: 80px 56px;
       border-top: 1px solid var(--border);
       max-width: 576px;
@@ -464,9 +463,8 @@
       }
 
       .gallery-section { padding: 0 24px 64px; }
-      #kontakt { padding: 48px 24px; max-width: 100%; }
+      #contact { padding: 48px 24px; max-width: 100%; }
       footer { padding: 20px 24px; }
-      #preview { display: none; }
       input, textarea { font-size: 16px; }
     }
   </style>
@@ -474,20 +472,20 @@
 <body>
 
   <header>
-    <a href="index.html" class="logo"><img src="images/logo.png" alt="Tom Martinsen"></a>
+    <a href="index-en.html" class="logo"><img src="images/logo.png" alt="Tom Martinsen"></a>
     <div class="header-right">
-      <button class="nav-hamburger" id="nav-hamburger" aria-label="Meny">
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
       <nav class="header-nav" id="header-nav">
-        <a href="#galleri">Galleri</a>
-        <a href="om-tom.html">Om Tom</a>
-        <a href="#kontakt">Kontakt</a>
+        <a href="#gallery">Gallery</a>
+        <a href="om-tom-en.html">About Tom</a>
+        <a href="#contact">Contact</a>
       </nav>
       <div class="lang-toggle">
-        <span class="lang-active">NO</span>
+        <a href="index.html" class="lang-link">NO</a>
         <span class="lang-sep">/</span>
-        <a href="index-en.html" class="lang-link">EN</a>
+        <span class="lang-active">EN</span>
       </div>
     </div>
   </header>
@@ -495,15 +493,15 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-bio">
-      <span class="hero-eyebrow">Offisielt galleri</span>
+      <span class="hero-eyebrow">Official gallery</span>
       <div>
         <div class="hero-name">Tom<br>Martinsen</div>
-        <div class="hero-years">Fotograf</div>
+        <div class="hero-years">Photographer</div>
       </div>
       <p class="hero-text">
-        Pressefotograf og kunstner med over tre tiår i Dagbladet, mottaker av Fritt Ords honnørpris og representert i samlinger ved blant annet Henie Onstad Kunstsenter og Moderna museet i Stockholm.
+        Press photographer and artist with over three decades at Dagbladet, recipient of the Fritt Ord Honorary Award and represented in collections at Henie Onstad Kunstsenter and Moderna Museet in Stockholm, among others.
       </p>
-      <a href="om-tom.html" class="hero-link">Om Tom →</a>
+      <a href="om-tom-en.html" class="hero-link">About Tom →</a>
     </div>
     <div class="hero-image-wrap" id="hero-wrap">
       <div class="hero-image-inner" id="hero-inner">
@@ -522,25 +520,25 @@
       <img id="modal-img" src="" alt="">
       <div class="modal-caption" id="modal-caption"></div>
     </div>
-    <a href="kjop.html" class="modal-buy">Kjøp</a>
+    <a href="kjop-en.html" class="modal-buy">Buy</a>
   </div>
 
   <!-- Gallery list -->
-  <section class="gallery-section" id="galleri">
-    <span class="section-label">Galleri</span>
+  <section class="gallery-section" id="gallery">
+    <span class="section-label">Gallery</span>
     <ul class="project-list">
       <li class="project-item">
-        <a href="on-the-road.html" class="project-link">
+        <a href="on-the-road-en.html" class="project-link">
           <span class="project-name">On the Road</span>
         </a>
       </li>
       <li class="project-item">
-        <a href="haiku.html" class="project-link">
+        <a href="haiku-en.html" class="project-link">
           <span class="project-name">Haiku</span>
         </a>
       </li>
       <li class="project-item">
-        <a href="steinansikt.html" class="project-link">
+        <a href="steinansikt-en.html" class="project-link">
           <span class="project-name">Steinansikt</span>
         </a>
       </li>
@@ -548,30 +546,30 @@
   </section>
 
   <!-- Contact -->
-  <section id="kontakt">
-    <span class="contact-label">Kontakt</span>
-    <h2 class="contact-heading">For spørsmål om kjøp<br>eller tilgjengelighet.</h2>
-    <p class="contact-body">Vi svarer normalt innen 1–2 virkedager.</p>
+  <section id="contact">
+    <span class="contact-label">Contact</span>
+    <h2 class="contact-heading">For enquiries about purchases<br>or availability.</h2>
+    <p class="contact-body">We usually respond within 1–2 working days.</p>
     <form class="contact-form" id="contact-form">
       <div class="form-field">
-        <label for="name">Navn</label>
-        <input type="text" id="name" name="name" placeholder="Ditt navn" required>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
       </div>
       <div class="form-field">
-        <label for="email">E-post</label>
-        <input type="email" id="email" name="email" placeholder="din@epost.no" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required>
       </div>
       <div class="form-field">
-        <label for="message">Melding</label>
-        <textarea id="message" name="message" placeholder="Fortell oss hva du er interessert i…" required></textarea>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Tell us what you are interested in…" required></textarea>
       </div>
-      <button type="submit" class="submit-btn">Send melding</button>
-      <p class="form-success" id="form-success">Melding mottatt — vi tar kontakt snart.</p>
+      <button type="submit" class="submit-btn">Send message</button>
+      <p class="form-success" id="form-success">Message received — we will be in touch shortly.</p>
     </form>
   </section>
 
   <footer>
-    <span class="footer-copy">© 2025 Tom Martinsen Estate. Alle rettigheter forbeholdt.</span>
+    <span class="footer-copy">© 2025 Tom Martinsen Estate. All rights reserved.</span>
   </footer>
 
   <script>
@@ -597,14 +595,14 @@
     document.getElementById('hero-caption').textContent = pick.title;
 
     // Fullscreen modal
-    const heroModal   = document.getElementById('hero-modal');
-    const modalImg    = document.getElementById('modal-img');
+    const heroModal    = document.getElementById('hero-modal');
+    const modalImg     = document.getElementById('modal-img');
     const modalCaption = document.getElementById('modal-caption');
 
     function openModal() {
       modalImg.src = heroImg.src;
       modalCaption.textContent = pick.title;
-      document.querySelector('.modal-buy').href = 'kjop.html?img=' + encodeURIComponent(heroImg.src) + '&title=' + encodeURIComponent(pick.title);
+      document.querySelector('.modal-buy').href = 'kjop-en.html?img=' + encodeURIComponent(heroImg.src) + '&title=' + encodeURIComponent(pick.title);
       heroModal.classList.add('open');
     }
     function closeModal() {

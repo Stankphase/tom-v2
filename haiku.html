@@ -12,6 +12,8 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; height: 100dvh; }
 
+    @keyframes pageFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
     body {
       background: #f8f6f3;
       font-family: 'Albert Sans', sans-serif;
@@ -21,7 +23,9 @@
       height: 100dvh;
       display: flex;
       flex-direction: column;
+      animation: pageFadeIn 0.35s ease both;
     }
+    body.page-exit { opacity: 0; transition: opacity 0.25s ease; }
 
     header {
       position: absolute;
@@ -62,6 +66,7 @@
       margin-top: 4px;
       display: block;
     }
+
 
     .viewer {
       flex: 1;
@@ -156,26 +161,42 @@
     const buyLink = document.getElementById('buy-link');
     let current   = 0;
 
-    function show(idx) {
+    function show(idx, instant = false) {
       current = (idx + images.length) % images.length;
       el.classList.remove('loaded');
       const src = BASE + images[current].file.split('/').map(encodeURIComponent).join('/');
-      const next = new Image();
-      next.src = src;
-      next.onload = () => { el.src = src; el.classList.add('loaded'); };
-      title.textContent   = images[current].title;
-      counter.textContent = (current + 1) + ' — ' + images.length;
-      buyLink.href = 'kjop.html?img=' + encodeURIComponent(src) + '&title=' + encodeURIComponent(images[current].title);
+      setTimeout(() => {
+        const next = new Image();
+        next.src = src;
+        next.onload = () => { el.src = src; el.classList.add('loaded'); };
+        title.textContent   = images[current].title;
+        counter.textContent = (current + 1) + ' — ' + images.length;
+        buyLink.href = 'kjop.html?img=' + encodeURIComponent(src) + '&title=' + encodeURIComponent(images[current].title);
+      }, instant ? 0 : 250);
     }
 
-    show(0);
+    show(0, true);
     document.getElementById('prev').addEventListener('click', () => show(current - 1));
     document.getElementById('next').addEventListener('click', () => show(current + 1));
 
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowLeft')  show(current - 1);
       if (e.key === 'ArrowRight') show(current + 1);
-      if (e.key === 'Escape') location.href = 'index.html';
+      if (e.key === 'Escape') {
+        document.body.classList.add('page-exit');
+        setTimeout(() => { location.href = 'index.html'; }, 250);
+      }
+    });
+
+    // Page transitions
+    document.querySelectorAll('a[href]').forEach(a => {
+      a.addEventListener('click', e => {
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http')) return;
+        e.preventDefault();
+        document.body.classList.add('page-exit');
+        setTimeout(() => { location.href = href; }, 250);
+      });
     });
 
     let tx = 0;

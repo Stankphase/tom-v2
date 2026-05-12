@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Steinansikt — Tom Martinsen</title>
+  <title>Haiku — Tom Martinsen</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,300;1,300&family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@
       object-fit: contain;
       display: block;
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.3s ease;
       user-select: none;
       -webkit-user-drag: none;
     }
@@ -137,9 +137,9 @@
 <body>
 
   <header>
-    <a href="index.html" class="back">← Alle gallerier</a>
+    <a href="index-en.html" class="back">← All galleries</a>
     <div class="series-info">
-      <span class="series-title">Steinansikt</span>
+      <span class="series-title">Haiku</span>
       <span class="series-counter" id="counter"></span>
     </div>
   </header>
@@ -149,12 +149,12 @@
     <div class="img-title" id="img-title"></div>
     <div class="zone prev" id="prev"></div>
     <div class="zone next" id="next"></div>
-    <a href="kjop.html" class="buy-link" id="buy-link">Kjøp</a>
+    <a href="kjop-en.html" class="buy-link" id="buy-link">Buy</a>
   </div>
 
   <script>
-    const BASE   = 'images/naturbilder/';
-    const images = GALLERY.naturbilder;
+    const BASE   = 'images/haiku/';
+    const images = GALLERY.haiku;
     const el      = document.getElementById('img');
     const title   = document.getElementById('img-title');
     const counter = document.getElementById('counter');
@@ -171,7 +171,7 @@
         next.onload = () => { el.src = src; el.classList.add('loaded'); };
         title.textContent   = images[current].title;
         counter.textContent = (current + 1) + ' — ' + images.length;
-        buyLink.href = 'kjop.html?img=' + encodeURIComponent(src) + '&title=' + encodeURIComponent(images[current].title);
+        buyLink.href = 'kjop-en.html?img=' + encodeURIComponent(src) + '&title=' + encodeURIComponent(images[current].title);
       }, instant ? 0 : 250);
     }
 
@@ -184,7 +184,7 @@
       if (e.key === 'ArrowRight') show(current + 1);
       if (e.key === 'Escape') {
         document.body.classList.add('page-exit');
-        setTimeout(() => { location.href = 'index.html'; }, 250);
+        setTimeout(() => { location.href = 'index-en.html'; }, 250);
       }
     });
 
