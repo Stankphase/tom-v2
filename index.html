@@ -144,8 +144,11 @@
 
     .hero-caption {
       font-size: 10px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       color: var(--muted);
+      text-align: center;
+      display: block;
+      width: 100%;
     }
 
     /* ── Gallery list ── */
@@ -186,7 +189,7 @@
     }
     .project-link:hover .project-name { color: var(--muted); }
 
-    /* ── Hero overlay ── */
+    /* ── Hero image clickable ── */
     .hero-image-inner {
       position: relative;
       display: inline-block;
@@ -202,37 +205,74 @@
       transition: background 0.35s ease;
       pointer-events: none;
     }
-    .hero-image-inner:hover::after {
-      background: rgba(0,0,0,0.07);
-    }
+    .hero-image-inner:hover::after { background: rgba(0,0,0,0.07); }
 
-    .hero-overlay {
-      position: absolute;
+    /* ── Fullscreen modal ── */
+    #hero-modal {
+      position: fixed;
       inset: 0;
-      background: rgba(20, 18, 15, 0.55);
+      z-index: 100;
+      background: #f8f6f3;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
-      transition: opacity 0.35s ease;
       pointer-events: none;
+      transition: opacity 0.35s ease;
     }
-    .hero-image-wrap.open .hero-overlay {
+    #hero-modal.open {
       opacity: 1;
       pointer-events: auto;
     }
-
-    .hero-overlay a {
-      font-size: 10px;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: #f0ede8;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(240,237,232,0.35);
-      padding-bottom: 3px;
-      transition: border-color 0.2s;
+    #hero-modal-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
     }
-    .hero-overlay a:hover { border-color: #f0ede8; }
+    #hero-modal-inner img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .modal-close {
+      position: fixed;
+      top: 28px;
+      right: 40px;
+      background: none;
+      border: none;
+      color: #b0ab9e;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 101;
+      line-height: 1;
+      transition: color 0.2s;
+      padding: 0;
+    }
+    .modal-close:hover { color: #111; }
+    .modal-buy {
+      position: fixed;
+      bottom: 32px;
+      right: 48px;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #c8c4bc;
+      text-decoration: none;
+      transition: color 0.25s;
+      z-index: 101;
+    }
+    .modal-buy:hover { color: #111; }
+    .modal-caption {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: #b0ab9e;
+      text-align: center;
+    }
 
 
     /* ── Contact ── */
@@ -383,15 +423,22 @@
       <a href="om-tom.html" class="hero-link">Om Tom →</a>
     </div>
     <div class="hero-image-wrap" id="hero-wrap">
-      <div class="hero-image-inner">
+      <div class="hero-image-inner" id="hero-inner">
         <img id="hero-img" src="" alt="">
-        <div class="hero-overlay" id="hero-overlay">
-          <a href="kjop.html">Kjøp trykk</a>
-        </div>
       </div>
       <span class="hero-caption" id="hero-caption"></span>
     </div>
   </section>
+
+  <!-- Fullscreen modal -->
+  <div id="hero-modal">
+    <button class="modal-close" id="modal-close">×</button>
+    <div id="hero-modal-inner">
+      <img id="modal-img" src="" alt="">
+      <div class="modal-caption" id="modal-caption"></div>
+    </div>
+    <a href="kjop.html" class="modal-buy">Kjøp trykk</a>
+  </div>
 
   <!-- Gallery list -->
   <section class="gallery-section" id="galleri">
@@ -462,15 +509,29 @@
     pre.onload = () => { heroImg.src = pre.src; heroImg.classList.add('loaded'); };
     document.getElementById('hero-caption').textContent = pick.title;
 
-    // Hero overlay
-    const heroWrap = document.getElementById('hero-wrap');
+    // Fullscreen modal
+    const heroModal   = document.getElementById('hero-modal');
+    const modalImg    = document.getElementById('modal-img');
+    const modalCaption = document.getElementById('modal-caption');
 
-    heroWrap.addEventListener('click', e => {
-      if (e.target.closest('a')) return;
-      heroWrap.classList.toggle('open');
+    function openModal() {
+      modalImg.src = heroImg.src;
+      modalCaption.textContent = pick.title;
+      heroModal.classList.add('open');
+    }
+    function closeModal() {
+      heroModal.classList.remove('open');
+    }
+
+    document.getElementById('hero-inner').addEventListener('click', openModal);
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    heroModal.addEventListener('click', e => {
+      if (!document.getElementById('hero-modal-inner').contains(e.target)
+          && e.target !== document.getElementById('modal-close')
+          && !e.target.closest('.modal-buy')) closeModal();
     });
-    document.addEventListener('click', e => {
-      if (!heroWrap.contains(e.target)) heroWrap.classList.remove('open');
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
     });
 
     // Contact form
