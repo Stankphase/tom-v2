@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kjøp trykk — Tom Martinsen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,300;0,400;1,300&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:     #f8f6f3;
+      --text:   #111;
+      --muted:  #b0ab9e;
+      --border: #e2ddd7;
+      --sans:   'Albert Sans', sans-serif;
+      --serif:  'Cormorant Garamond', serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 20;
+      padding: 36px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg);
+    }
+
+    .logo { display: block; text-decoration: none; }
+    .logo img { height: 80px; width: auto; display: block; }
+
+    .header-nav { display: flex; gap: 36px; }
+    .header-nav a {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+    .header-nav a:hover { color: var(--text); }
+
+    /* ── Content ── */
+    .page-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 180px 56px 100px;
+    }
+
+    .page-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-family: var(--serif);
+      font-size: clamp(36px, 4vw, 60px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+
+    .page-body {
+      color: #6a6560;
+      font-size: 13px;
+      line-height: 1.9;
+      margin-bottom: 3rem;
+    }
+
+    /* ── Sizes ── */
+    .sizes {
+      border-top: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+
+    .size-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .size-label {
+      font-size: 13px;
+      color: var(--text);
+      letter-spacing: 0.04em;
+    }
+
+    .size-price {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text);
+    }
+
+    /* ── Print info ── */
+    .print-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 3rem;
+    }
+
+    .print-info span {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    /* ── Form ── */
+    .form-label {
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 24px;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 26px; }
+    .form-field { display: flex; flex-direction: column; gap: 8px; }
+
+    label {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input, textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #dedad4;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      padding: 10px 0;
+      outline: none;
+      transition: border-color 0.3s;
+      width: 100%;
+      caret-color: #999;
+    }
+    input:focus, textarea:focus { border-bottom-color: #8a8277; }
+    textarea { resize: none; height: 96px; }
+    input::placeholder, textarea::placeholder { color: #d0cdc7; }
+
+    .submit-btn {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px solid #d0cdc7;
+      color: #8a8277;
+      font-family: var(--sans);
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 13px 36px;
+      cursor: pointer;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .submit-btn:hover { border-color: #8a8277; color: var(--text); }
+
+    .form-note {
+      font-size: 11px;
+      color: #b0ab9e;
+      line-height: 1.7;
+    }
+
+    .form-success {
+      display: none;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 28px 56px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: #ccc8c0; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      header { padding: 20px 24px; }
+      .logo img { height: 68px; }
+      .header-nav { gap: 20px; }
+      .header-nav a:first-child { display: none; }
+      .page-wrap { padding: 140px 24px 64px; }
+      footer { padding: 20px 24px; }
+      input, textarea { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo"><img src="../tom-martinsen-gallery-lys/images/logo.png" alt="Tom Martinsen"></a>
+    <nav class="header-nav">
+      <a href="index.html#galleri">Galleri</a>
+      <a href="om-tom.html">Om Tom</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <div class="page-wrap">
+
+    <span class="page-eyebrow">Kunsttrykk</span>
+    <h1 class="page-title">Kjøp trykk</h1>
+
+    <p class="page-body">
+      Alle trykk produseres på bestilling og leveres med autentisitetssertifikat utstedt av Tom Martinsen Estate. Vi svarer normalt innen 1–2 virkedager.
+    </p>
+
+    <div class="sizes">
+      <div class="size-row">
+        <span class="size-label">30 × 40 cm</span>
+        <span class="size-price">kr 8 000</span>
+      </div>
+      <div class="size-row">
+        <span class="size-label">50 × 70 cm</span>
+        <span class="size-price">kr 15 000</span>
+      </div>
+      <div class="size-row">
+        <span class="size-label">70 × 100 cm</span>
+        <span class="size-price">kr 20 000</span>
+      </div>
+    </div>
+
+    <div class="print-info">
+      <span>Giclée-trykk på arkivkvalitetspapir</span>
+      <span>Opplag: 25 eksemplarer per størrelse <em>(bekreftes av estate)</em></span>
+      <span>Levering innen 3–5 virkedager</span>
+    </div>
+
+    <span class="form-label" id="kontakt">Send forespørsel</span>
+
+    <form class="contact-form" id="purchase-form">
+      <div class="form-field">
+        <label for="name">Navn</label>
+        <input type="text" id="name" name="name" placeholder="Ditt navn" required>
+      </div>
+      <div class="form-field">
+        <label for="email">E-post</label>
+        <input type="email" id="email" name="email" placeholder="din@epost.no" required>
+      </div>
+      <div class="form-field">
+        <label for="message">Melding</label>
+        <textarea id="message" name="message" placeholder="Hvilket bilde og hvilken størrelse er du interessert i?" required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Send forespørsel</button>
+      <p class="form-success" id="form-success">Melding mottatt — vi tar kontakt snart.</p>
+      <p class="form-note">Vi sender bekreftelse og faktura per e-post.</p>
+    </form>
+
+  </div>
+
+  <footer>
+    <span class="footer-copy">© 2025 Tom Martinsen Estate. Alle rettigheter forbeholdt.</span>
+  </footer>
+
+  <script>
+    document.getElementById('purchase-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('.submit-btn');
+      const msg = document.getElementById('form-success');
+      btn.style.display = 'none';
+      msg.style.display = 'block';
+      setTimeout(() => { e.target.reset(); btn.style.display = ''; msg.style.display = 'none'; }, 4000);
+    });
+  </script>
+
+</body>
+</html>

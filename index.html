@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tom Martinsen — Fotograf</title>
+  <meta name="description" content="Offisielt galleri for Tom Martinsens fotografier.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,300;0,400;1,300&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&display=swap" rel="stylesheet">
+  <script src="gallery-data.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:     #f8f6f3;
+      --text:   #111;
+      --muted:  #b0ab9e;
+      --border: #e2ddd7;
+      --sans:   'Albert Sans', sans-serif;
+      --serif:  'Cormorant Garamond', serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 20;
+      padding: 36px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: block;
+      text-decoration: none;
+    }
+    .logo img {
+      height: 80px;
+      width: auto;
+      display: block;
+    }
+
+    .header-nav { display: flex; gap: 36px; }
+    .header-nav a {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+    .header-nav a:hover { color: var(--text); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 120px 56px 80px;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .hero-bio {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(52px, 6vw, 96px);
+      font-weight: 300;
+      line-height: 1.0;
+    }
+
+    .hero-years {
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.5vw, 36px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    .hero-text {
+      font-size: 13px;
+      color: #6a6560;
+      line-height: 1.9;
+      max-width: 380px;
+      margin-top: 0.5rem;
+    }
+
+    .hero-link {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.25s;
+      margin-top: 0.25rem;
+    }
+    .hero-link:hover { color: var(--text); }
+
+    .hero-image-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .hero-image-wrap img {
+      width: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      object-position: left top;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+    }
+    .hero-image-wrap img.loaded { opacity: 1; }
+
+    .hero-caption {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    /* ── Gallery list ── */
+    .gallery-section {
+      padding: 0 56px 100px;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 28px 0 20px;
+      display: block;
+    }
+
+    .project-list { list-style: none; }
+    .project-item { border-top: 1px solid var(--border); }
+    .project-item:last-child { border-bottom: 1px solid var(--border); }
+
+    .project-link {
+      display: flex;
+      align-items: baseline;
+      padding: 20px 0;
+      text-decoration: none;
+    }
+
+    .project-name {
+      font-family: var(--serif);
+      font-size: clamp(30px, 4vw, 56px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--text);
+      flex: 1;
+      line-height: 1.1;
+      transition: color 0.3s;
+    }
+    .project-link:hover .project-name { color: var(--muted); }
+
+    .project-count {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: #d0ccc4;
+      align-self: center;
+    }
+
+    /* ── Hover preview ── */
+    #preview {
+      position: fixed;
+      pointer-events: none;
+      z-index: 30;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      background: #e2ddd7;
+      top: 200px;
+      left: 200px;
+    }
+    #preview.visible { opacity: 1; }
+    #preview img {
+      display: block;
+      width: 220px;
+      height: 280px;
+      object-fit: cover;
+      box-shadow: 0 16px 56px rgba(0,0,0,0.13);
+    }
+
+    /* ── Contact ── */
+    #kontakt {
+      padding: 80px 56px;
+      border-top: 1px solid var(--border);
+      max-width: 576px;
+    }
+
+    .contact-label {
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 22px;
+    }
+
+    .contact-heading {
+      font-family: var(--serif);
+      font-size: clamp(26px, 3vw, 42px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+
+    .contact-body {
+      color: #8a8277;
+      font-size: 13px;
+      line-height: 1.75;
+      margin-bottom: 36px;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 26px; }
+    .form-field { display: flex; flex-direction: column; gap: 8px; }
+
+    label {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input, textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #dedad4;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      padding: 10px 0;
+      outline: none;
+      transition: border-color 0.3s;
+      width: 100%;
+      caret-color: #999;
+    }
+    input:focus, textarea:focus { border-bottom-color: #8a8277; }
+    textarea { resize: none; height: 96px; }
+    input::placeholder, textarea::placeholder { color: #d0cdc7; }
+
+    .submit-btn {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px solid #d0cdc7;
+      color: #8a8277;
+      font-family: var(--sans);
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 13px 36px;
+      cursor: pointer;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .submit-btn:hover { border-color: #8a8277; color: var(--text); }
+
+    .form-success {
+      display: none;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 28px 56px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: #ccc8c0; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      header { padding: 20px 24px; }
+      .logo img { height: 68px; }
+      .header-nav { gap: 20px; }
+      .header-nav a:first-child { display: none; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 88px 24px 60px;
+        gap: 48px;
+        min-height: unset;
+      }
+      .hero-image-wrap {
+        order: -1;
+        align-items: center;
+      }
+      .hero-image-wrap img {
+        max-height: 52vh;
+        object-position: center top;
+      }
+
+      .gallery-section { padding: 0 24px 64px; }
+      #kontakt { padding: 48px 24px; max-width: 100%; }
+      footer { padding: 20px 24px; }
+      #preview { display: none; }
+      input, textarea { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo"><img src="../tom-martinsen-gallery-lys/images/logo.png" alt="Tom Martinsen"></a>
+    <nav class="header-nav">
+      <a href="#galleri">Galleri</a>
+      <a href="om-tom.html">Om Tom</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bio">
+      <span class="hero-eyebrow">Offisielt galleri</span>
+      <div>
+        <div class="hero-name">Tom<br>Martinsen</div>
+        <div class="hero-years">Fotograf</div>
+      </div>
+      <p class="hero-text">
+        Pressefotograf og kunstner med over tre tiår i Dagbladet, mottaker av Fritt Ords honnørpris og representert i samlinger ved blant annet Henie Onstad Kunstsenter og Moderna museet i Stockholm.
+      </p>
+      <a href="om-tom.html" class="hero-link">Om Tom →</a>
+    </div>
+    <div class="hero-image-wrap">
+      <img id="hero-img" src="" alt="">
+      <span class="hero-caption" id="hero-caption"></span>
+    </div>
+  </section>
+
+  <!-- Gallery list -->
+  <section class="gallery-section" id="galleri">
+    <span class="section-label">Galleri</span>
+    <ul class="project-list">
+      <li class="project-item">
+        <a href="on-the-road.html" class="project-link" data-key="onTheRoad">
+          <span class="project-name">On the Road</span>
+          <span class="project-count" id="count-road"></span>
+        </a>
+      </li>
+      <li class="project-item">
+        <a href="haiku.html" class="project-link" data-key="haiku">
+          <span class="project-name">Haiku</span>
+          <span class="project-count" id="count-haiku"></span>
+        </a>
+      </li>
+      <li class="project-item">
+        <a href="steinansikt.html" class="project-link" data-key="naturbilder">
+          <span class="project-name">Steinansikt</span>
+          <span class="project-count" id="count-natur"></span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Contact -->
+  <section id="kontakt">
+    <span class="contact-label">Kontakt</span>
+    <h2 class="contact-heading">For spørsmål om kjøp<br>eller tilgjengelighet.</h2>
+    <p class="contact-body">Vi svarer normalt innen 1–2 virkedager.</p>
+    <form class="contact-form" id="contact-form">
+      <div class="form-field">
+        <label for="name">Navn</label>
+        <input type="text" id="name" name="name" placeholder="Ditt navn" required>
+      </div>
+      <div class="form-field">
+        <label for="email">E-post</label>
+        <input type="email" id="email" name="email" placeholder="din@epost.no" required>
+      </div>
+      <div class="form-field">
+        <label for="message">Melding</label>
+        <textarea id="message" name="message" placeholder="Fortell oss hva du er interessert i…" required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Send melding</button>
+      <p class="form-success" id="form-success">Melding mottatt — vi tar kontakt snart.</p>
+    </form>
+  </section>
+
+  <footer>
+    <span class="footer-copy">© 2025 Tom Martinsen Estate. Alle rettigheter forbeholdt.</span>
+  </footer>
+
+  <div id="preview"><img src="" alt="" id="preview-img"></div>
+
+  <script>
+    const BASE = '../tom-martinsen-gallery-lys/images/';
+
+    function imgSrc(folder, file) {
+      return BASE + folder + '/' + file.split('/').map(encodeURIComponent).join('/');
+    }
+
+    // Random hero image from all galleries
+    const all = [
+      ...GALLERY.onTheRoad.map(img => ({ ...img, folder: 'on-the-road' })),
+      ...GALLERY.haiku.map(img => ({ ...img, folder: 'haiku' })),
+      ...GALLERY.naturbilder.map(img => ({ ...img, folder: 'naturbilder' })),
+    ];
+    const pick = all[Math.floor(Math.random() * all.length)];
+    const heroImg = document.getElementById('hero-img');
+    const pre = new Image();
+    pre.src = imgSrc(pick.folder, pick.file);
+    pre.onload = () => { heroImg.src = pre.src; heroImg.classList.add('loaded'); };
+    document.getElementById('hero-caption').textContent = pick.title;
+
+    // Gallery counts
+    document.getElementById('count-road').textContent  = GALLERY.onTheRoad.length + ' bilder';
+    document.getElementById('count-haiku').textContent = GALLERY.haiku.length + ' bilder';
+    document.getElementById('count-natur').textContent = GALLERY.naturbilder.length + ' bilder';
+
+    // Hover preview
+    const folders = { onTheRoad: 'on-the-road', haiku: 'haiku', naturbilder: 'naturbilder' };
+    const preview    = document.getElementById('preview');
+    const previewImg = document.getElementById('preview-img');
+    let mx = 0, my = 0, raf = null;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      if (preview.classList.contains('visible')) {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          preview.style.transform = `translate(${mx + 28}px, ${my - 150}px)`;
+        });
+      }
+    });
+
+    document.querySelectorAll('.project-link[data-key]').forEach(link => {
+      const key    = link.dataset.key;
+      const images = GALLERY[key];
+      const src    = imgSrc(folders[key], images[0].file);
+
+      // Preload so image is ready on first hover
+      const preloader = new Image();
+      preloader.src = src;
+
+      link.addEventListener('mouseenter', () => {
+        previewImg.src = src;
+        preview.style.transform = `translate(${mx + 28}px, ${my - 150}px)`;
+        preview.classList.add('visible');
+      });
+      link.addEventListener('mouseleave', () => preview.classList.remove('visible'));
+    });
+
+    // Contact form
+    document.getElementById('contact-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('.submit-btn');
+      const msg = document.getElementById('form-success');
+      btn.style.display = 'none';
+      msg.style.display = 'block';
+      setTimeout(() => { e.target.reset(); btn.style.display = ''; msg.style.display = 'none'; }, 4000);
+    });
+  </script>
+
+</body>
+</html>
