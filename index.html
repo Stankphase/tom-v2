@@ -54,14 +54,36 @@
 
     .header-nav { display: flex; gap: 36px; }
     .header-nav a {
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #8a8277;
       text-decoration: none;
       transition: color 0.25s;
     }
     .header-nav a:hover { color: var(--text); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 51;
+      position: relative;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--text);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     /* ── Hero ── */
     .hero {
@@ -147,8 +169,6 @@
       letter-spacing: 0.14em;
       color: var(--muted);
       text-align: center;
-      display: block;
-      width: 100%;
     }
 
     /* ── Gallery list ── */
@@ -192,12 +212,20 @@
     /* ── Hero image clickable ── */
     .hero-image-inner {
       position: relative;
-      display: inline-block;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      align-items: center;
       max-width: 100%;
       cursor: pointer;
     }
 
-    .hero-image-inner::after {
+    .hero-img-box {
+      position: relative;
+      display: block;
+      line-height: 0;
+    }
+    .hero-img-box::after {
       content: '';
       position: absolute;
       inset: 0;
@@ -205,7 +233,7 @@
       transition: background 0.35s ease;
       pointer-events: none;
     }
-    .hero-image-inner:hover::after { background: rgba(0,0,0,0.07); }
+    .hero-image-inner:hover .hero-img-box::after { background: rgba(0,0,0,0.07); }
 
     /* ── Fullscreen modal ── */
     #hero-modal {
@@ -373,8 +401,24 @@
     @media (max-width: 768px) {
       header { padding: 20px 24px; }
       .logo img { height: 68px; }
-      .header-nav { gap: 20px; }
-      .header-nav a:first-child { display: none; }
+      .nav-hamburger { display: flex; }
+      .header-nav {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        z-index: 50;
+      }
+      .header-nav.open { display: flex; }
+      .header-nav a {
+        font-size: 13px;
+        color: var(--text);
+        letter-spacing: 0.22em;
+      }
 
       .hero {
         grid-template-columns: 1fr;
@@ -402,7 +446,10 @@
 
   <header>
     <a href="index.html" class="logo"><img src="images/logo.png" alt="Tom Martinsen"></a>
-    <nav class="header-nav">
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Meny">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="header-nav" id="header-nav">
       <a href="#galleri">Galleri</a>
       <a href="om-tom.html">Om Tom</a>
       <a href="#kontakt">Kontakt</a>
@@ -424,9 +471,11 @@
     </div>
     <div class="hero-image-wrap" id="hero-wrap">
       <div class="hero-image-inner" id="hero-inner">
-        <img id="hero-img" src="" alt="">
+        <div class="hero-img-box">
+          <img id="hero-img" src="" alt="">
+        </div>
+        <span class="hero-caption" id="hero-caption"></span>
       </div>
-      <span class="hero-caption" id="hero-caption"></span>
     </div>
   </section>
 
@@ -437,7 +486,7 @@
       <img id="modal-img" src="" alt="">
       <div class="modal-caption" id="modal-caption"></div>
     </div>
-    <a href="kjop.html" class="modal-buy">Kjøp trykk</a>
+    <a href="kjop.html" class="modal-buy">Kjøp</a>
   </div>
 
   <!-- Gallery list -->
@@ -517,6 +566,7 @@
     function openModal() {
       modalImg.src = heroImg.src;
       modalCaption.textContent = pick.title;
+      document.querySelector('.modal-buy').href = 'kjop.html?img=' + encodeURIComponent(heroImg.src) + '&title=' + encodeURIComponent(pick.title);
       heroModal.classList.add('open');
     }
     function closeModal() {
@@ -533,6 +583,18 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeModal();
     });
+
+    // Hamburger menu
+    const hamburger = document.getElementById('nav-hamburger');
+    const headerNav = document.getElementById('header-nav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      headerNav.classList.toggle('open');
+    });
+    headerNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      headerNav.classList.remove('open');
+    }));
 
     // Contact form
     document.getElementById('contact-form').addEventListener('submit', e => {

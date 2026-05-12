@@ -34,10 +34,10 @@
     }
 
     .back {
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: #b0ab9e;
+      color: #8a8277;
       text-decoration: none;
       transition: color 0.25s;
     }
@@ -47,7 +47,7 @@
 
     .series-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 300;
       font-style: italic;
       color: #111;
@@ -56,9 +56,9 @@
     }
 
     .series-counter {
-      font-size: 10px;
+      font-size: 12px;
       letter-spacing: 0.18em;
-      color: #c8c4bc;
+      color: #8a8277;
       margin-top: 4px;
       display: block;
     }
@@ -87,9 +87,9 @@
     .viewer img.loaded { opacity: 1; }
 
     .img-title {
-      font-size: 10px;
+      font-size: 12px;
       letter-spacing: 0.14em;
-      color: #b0ab9e;
+      color: #8a8277;
       text-align: center;
     }
 
@@ -120,7 +120,10 @@
 
     @media (max-width: 600px) {
       header { padding: 20px 24px; }
+      .back { font-size: 10px; }
       .series-title { font-size: 13px; }
+      .series-counter { font-size: 10px; }
+      .img-title { font-size: 10px; }
       .viewer { padding: 72px 16px 48px; }
       .viewer img { max-height: 60dvh; max-height: 60vh; }
     }
@@ -141,16 +144,17 @@
     <div class="img-title" id="img-title"></div>
     <div class="zone prev" id="prev"></div>
     <div class="zone next" id="next"></div>
-    <a href="kjop.html" class="buy-link">Kjøp trykk</a>
+    <a href="kjop.html" class="buy-link" id="buy-link">Kjøp</a>
   </div>
 
   <script>
     const BASE   = 'images/on-the-road/';
     const images = GALLERY.onTheRoad;
-    const el     = document.getElementById('img');
-    const title  = document.getElementById('img-title');
+    const el      = document.getElementById('img');
+    const title   = document.getElementById('img-title');
     const counter = document.getElementById('counter');
-    let current  = 0;
+    const buyLink = document.getElementById('buy-link');
+    let current   = 0;
 
     function show(idx) {
       current = (idx + images.length) % images.length;
@@ -161,6 +165,7 @@
       next.onload = () => { el.src = src; el.classList.add('loaded'); };
       title.textContent   = images[current].title;
       counter.textContent = (current + 1) + ' — ' + images.length;
+      buyLink.href = 'kjop.html?img=' + encodeURIComponent(src) + '&title=' + encodeURIComponent(images[current].title);
     }
 
     show(0);

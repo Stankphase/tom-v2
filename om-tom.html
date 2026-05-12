@@ -53,14 +53,36 @@
 
     .header-nav { display: flex; gap: 36px; }
     .header-nav a {
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #8a8277;
       text-decoration: none;
       transition: color 0.25s;
     }
     .header-nav a:hover, .header-nav a.active { color: var(--text); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 51;
+      position: relative;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--text);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     /* ── Bio intro (full width) ── */
     .bio-intro {
@@ -177,8 +199,20 @@
     @media (max-width: 768px) {
       header { padding: 20px 24px; }
       .logo img { height: 68px; }
-      .header-nav { gap: 20px; }
-      .header-nav a:first-child { display: none; }
+      .nav-hamburger { display: flex; }
+      .header-nav {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        z-index: 50;
+      }
+      .header-nav.open { display: flex; }
+      .header-nav a { font-size: 13px; color: var(--text); letter-spacing: 0.22em; }
       .bio-intro {
         grid-template-columns: 1fr;
         padding: 110px 24px 48px;
@@ -195,7 +229,10 @@
 
   <header>
     <a href="index.html" class="logo"><img src="images/logo.png" alt="Tom Martinsen"></a>
-    <nav class="header-nav">
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Meny">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="header-nav" id="header-nav">
       <a href="index.html#galleri">Galleri</a>
       <a href="om-tom.html" class="active">Om Tom</a>
       <a href="index.html#kontakt">Kontakt</a>
@@ -335,6 +372,19 @@
     </section>
 
   </div><!-- /cv-wrap -->
+
+  <script>
+    const hamburger = document.getElementById('nav-hamburger');
+    const headerNav = document.getElementById('header-nav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      headerNav.classList.toggle('open');
+    });
+    headerNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      headerNav.classList.remove('open');
+    }));
+  </script>
 
   <footer>
     <span class="footer-copy">© 2025 Tom Martinsen Estate. Alle rettigheter forbeholdt.</span>

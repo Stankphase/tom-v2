@@ -46,14 +46,36 @@
 
     .header-nav { display: flex; gap: 36px; }
     .header-nav a {
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #8a8277;
       text-decoration: none;
       transition: color 0.25s;
     }
     .header-nav a:hover { color: var(--text); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 51;
+      position: relative;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--text);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     /* ── Content ── */
     .page-wrap {
@@ -63,10 +85,10 @@
     }
 
     .page-eyebrow {
-      font-size: 9px;
+      font-size: 11px;
       letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #8a8277;
       display: block;
       margin-bottom: 20px;
     }
@@ -123,17 +145,17 @@
     }
 
     .print-info span {
-      font-size: 11px;
+      font-size: 12px;
       letter-spacing: 0.1em;
-      color: var(--muted);
+      color: #8a8277;
     }
 
     /* ── Form ── */
     .form-label {
-      font-size: 9px;
+      font-size: 11px;
       letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #8a8277;
       display: block;
       margin-bottom: 24px;
     }
@@ -142,10 +164,10 @@
     .form-field { display: flex; flex-direction: column; gap: 8px; }
 
     label {
-      font-size: 9px;
+      font-size: 11px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #8a8277;
     }
 
     input, textarea {
@@ -182,6 +204,37 @@
     }
     .submit-btn:hover { border-color: #8a8277; color: var(--text); }
 
+    /* ── Valgt bilde ── */
+    .selected-image {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .selected-image img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+      flex-shrink: 0;
+    }
+    .selected-image-title {
+      font-size: 12px;
+      color: #6a6560;
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+    }
+    .selected-image-label {
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
     .form-note {
       font-size: 11px;
       color: #b0ab9e;
@@ -210,8 +263,23 @@
     @media (max-width: 768px) {
       header { padding: 20px 24px; }
       .logo img { height: 68px; }
-      .header-nav { gap: 20px; }
-      .header-nav a:first-child { display: none; }
+      .nav-hamburger { display: flex; }
+      .header-nav {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        z-index: 50;
+      }
+      .header-nav.open { display: flex; }
+      .header-nav a { font-size: 13px; color: var(--text); letter-spacing: 0.22em; }
+      .page-eyebrow { font-size: 9px; }
+      label { font-size: 9px; }
+      .form-label { font-size: 9px; }
       .page-wrap { padding: 140px 24px 64px; }
       footer { padding: 20px 24px; }
       input, textarea { font-size: 16px; }
@@ -222,7 +290,10 @@
 
   <header>
     <a href="index.html" class="logo"><img src="images/logo.png" alt="Tom Martinsen"></a>
-    <nav class="header-nav">
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Meny">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="header-nav" id="header-nav">
       <a href="index.html#galleri">Galleri</a>
       <a href="om-tom.html">Om Tom</a>
       <a href="#kontakt">Kontakt</a>
@@ -233,6 +304,14 @@
 
     <span class="page-eyebrow">Kunsttrykk</span>
     <h1 class="page-title">Kjøp trykk</h1>
+
+    <div class="selected-image" id="selected-image" style="display:none;">
+      <img id="selected-img" src="" alt="">
+      <div>
+        <span class="selected-image-label">Valgt bilde</span>
+        <span class="selected-image-title" id="selected-title"></span>
+      </div>
+    </div>
 
     <p class="page-body">
       Alle trykk produseres på bestilling og leveres med autentisitetssertifikat utstedt av Tom Martinsen Estate. Vi svarer normalt innen 1–2 virkedager.
@@ -286,6 +365,30 @@
   </footer>
 
   <script>
+    const hamburger = document.getElementById('nav-hamburger');
+    const headerNav = document.getElementById('header-nav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      headerNav.classList.toggle('open');
+    });
+    headerNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      headerNav.classList.remove('open');
+    }));
+
+    // Vis valgt bilde fra URL-parameter
+    const params = new URLSearchParams(window.location.search);
+    const imgSrc  = params.get('img');
+    const imgTitle = params.get('title');
+    if (imgSrc) {
+      document.getElementById('selected-img').src = imgSrc;
+      document.getElementById('selected-title').textContent = imgTitle || '';
+      document.getElementById('selected-image').style.display = 'flex';
+      // Forhåndsfyll meldingsfeltet
+      const msgField = document.getElementById('message');
+      if (imgTitle) msgField.placeholder = 'Jeg er interessert i «' + imgTitle + '». Størrelse: …';
+    }
+
     document.getElementById('purchase-form').addEventListener('submit', e => {
       e.preventDefault();
       const btn = e.target.querySelector('.submit-btn');
